@@ -65,13 +65,3 @@ That means all Lost and Found items are stored in a **single table (`items`)**, 
 | `item_type` | VARCHAR | Set automatically (`LOST` or `FOUND`) |
 
 ---
-
-## 🧮 Entity Design
-
-### Base Class — `Item`
-- Common fields shared by all items.
-- Mapped as:
-  ```java
-  @Entity
-  @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-  @DiscriminatorColumn(name = "item_type")
