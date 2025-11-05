@@ -13,6 +13,7 @@ import java.util.Date;
 
 @Getter
 public class ResponseItemDTO {
+    private Long id;
     private String name;
     private String description;
     private String location;
@@ -27,6 +28,14 @@ public class ResponseItemDTO {
     private LocalDateTime updatedAt;
 
     private String itemType;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getItemType() {
         return itemType;

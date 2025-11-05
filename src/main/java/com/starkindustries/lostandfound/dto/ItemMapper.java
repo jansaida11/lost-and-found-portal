@@ -39,6 +39,7 @@ public class ItemMapper {
     public static ResponseItemDTO toResponseDTO(Item item){
         ResponseItemDTO responseItemDTO = new ResponseItemDTO();
 
+        responseItemDTO.setId(item.getId());
         responseItemDTO.setName(item.getName());
         responseItemDTO.setDate(item.getDate());
         responseItemDTO.setContactEmail(item.getContactEmail());
@@ -50,6 +51,26 @@ public class ItemMapper {
         responseItemDTO.setStatus(item.getStatus());
         responseItemDTO.setItemType(item.getItemType());
         return responseItemDTO;
+    }
+
+    public static Item updateItemDetails(UpdateReqDTO updateReqDTO, Item item){
+        if (updateReqDTO.getStatus() != null) {
+            item.setStatus(updateReqDTO.getStatus());
+        }
+        if (updateReqDTO.getDescription() != null) {
+            item.setDescription(updateReqDTO.getDescription());
+        }
+        if (updateReqDTO.getLocation() != null) {
+            item.setLocation(updateReqDTO.getLocation());
+        }
+        if (updateReqDTO.getContactPhone() != null) {
+            item.setContactPhone(updateReqDTO.getContactPhone());
+        }
+        if (updateReqDTO.getContactEmail() != null) {
+            item.setContactEmail(updateReqDTO.getContactEmail());
+        }
+
+        return item;
     }
 
 }

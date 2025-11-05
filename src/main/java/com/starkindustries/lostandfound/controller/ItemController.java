@@ -2,31 +2,52 @@ package com.starkindustries.lostandfound.controller;
 
 import com.starkindustries.lostandfound.dto.RequestItemDTO;
 import com.starkindustries.lostandfound.dto.ResponseItemDTO;
+import com.starkindustries.lostandfound.dto.UpdateReqDTO;
 import com.starkindustries.lostandfound.entity.Item;
 import com.starkindustries.lostandfound.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/items")
 public class ItemController {
 
     @Autowired
     private ItemService itemService;
 
     @PostMapping("/lost")
-    public ResponseItemDTO postLostItem(@RequestBody RequestItemDTO requestItemDTO){
-        return itemService.postLostItem(requestItemDTO);
+    public ResponseEntity<ResponseItemDTO> postLostItem(@RequestBody RequestItemDTO requestItemDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(itemService.postLostItem(requestItemDTO));
     }
 
     @PostMapping("/found")
-    public ResponseItemDTO postFoundItem(@RequestBody RequestItemDTO requestItemDTO){
-        return itemService.postFoundItem(requestItemDTO);
+    public ResponseEntity<ResponseItemDTO> postFoundItem(@RequestBody RequestItemDTO requestItemDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(itemService.postFoundItem(requestItemDTO));
     }
 
-    @GetMapping("/getAllItems")
-    public List<Item> getAllItems(){
-        return itemService.getAllItems();
+    @GetMapping()
+    public ResponseEntity<List<ResponseItemDTO>> getAllItems(){
+        List<ResponseItemDTO> items = itemService.getAllItems();
+        return ResponseEntity.ok(items); // 200 OK
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteItem(@PathVariable Long id) {
+        String response = itemService.deleteItem(id);
+        if (response.contains("not found")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        return ResponseEntity.ok(response); //200 OK
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseItemDTO> updateItem(@PathVariable Long id, @RequestBody UpdateReqDTO updateReqDTO){
+        ResponseItemDTO updatedItem = itemService.updateItem(id,updateReqDTO);
+        return ResponseEntity.ok(updatedItem);
+    }
+
 }
