@@ -39,8 +39,8 @@ This is the **first version** of the project (v1), focused on **core CRUD functi
 | ➕ Post Lost Item | Users can add an item they lost. |
 | ➕ Post Found Item | Users can record an item they found. |
 | 🔍 View All Items | Retrieve a combined list of all Lost and Found items. |
-| Delete an Item from portal |
-| Update an Item in portal |
+| Delete an Item | Delete an Item from portal by id |
+| Update an Item | Update an Item in portal by id |
 
 This version is designed as the **foundation** on which future functionalities like **search**, **update status**, **pagination**, and **authentication** will be added.
 
