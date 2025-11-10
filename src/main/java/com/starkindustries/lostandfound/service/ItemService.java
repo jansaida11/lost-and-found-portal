@@ -7,14 +7,13 @@ import com.starkindustries.lostandfound.dto.UpdateReqDTO;
 import com.starkindustries.lostandfound.entity.FoundItem;
 import com.starkindustries.lostandfound.entity.Item;
 import com.starkindustries.lostandfound.entity.LostItem;
+import com.starkindustries.lostandfound.exceptions.BadRequestException;
+import com.starkindustries.lostandfound.exceptions.ResourceNotFoundException;
 import com.starkindustries.lostandfound.repository.ItemRepository;
+import com.starkindustries.lostandfound.util.ItemStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,25 +49,62 @@ public class ItemService {
         return itemDTOS;
     }
 
+    //Retrieving by Status of items
+    public List<ResponseItemDTO> getByStatus(ItemStatus status) {
+        List<Item> items = itemRepository.findByStatus(status);
+        if(items.isEmpty()){
+            throw new ResourceNotFoundException("No Item was found with status: "+status);
+        }
+        List<ResponseItemDTO> responseItemDTOS = new ArrayList<>();
+
+        for(Item item : items){
+            responseItemDTOS.add(ItemMapper.toResponseDTO(item));
+        }
+        return responseItemDTOS;
+    }
+
+    //Retrieving by type of items
+    public List<ResponseItemDTO> getByType(String type) {
+
+        List<ResponseItemDTO> responseItemDTOS = new ArrayList<>();
+
+        String upperType = type.toUpperCase();
+
+        if (!upperType.equals("LOST") && !upperType.equals("FOUND")) {
+            throw new BadRequestException("Invalid type. Allowed values are LOST or FOUND.");
+        }
+
+        List<Item> items = itemRepository.findByType(upperType);
+        if (items.isEmpty()) {
+            throw new ResourceNotFoundException("No found items available in the system yet.");
+        }
+
+        for(Item item : items){
+            responseItemDTOS.add(ItemMapper.toResponseDTO(item));
+        }
+        return responseItemDTOS;
+    }
+
     //Deleting an item by ID
     public String deleteItem(Long id) {
         if (!itemRepository.existsById(id)) {
-            return "Item not found with ID: " + id;
+            throw new ResourceNotFoundException("Item not found with ID: " + id);
         }
         itemRepository.deleteById(id);
         return "Item deleted successfully.";
     }
 
+    //Updating an item by ID
     public ResponseItemDTO updateItem(Long id, UpdateReqDTO updateReqDTO) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Item not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Item not found with ID: " + id));
 
         Item updatedItem = ItemMapper.updateItemDetails(updateReqDTO, item);
-//        updatedItem.setUpdatedAt(LocalDateTime.now());
 
         itemRepository.save(updatedItem);
 
         return ItemMapper.toResponseDTO(updatedItem);
     }
+
 
 }

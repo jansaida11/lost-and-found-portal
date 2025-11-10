@@ -3,14 +3,16 @@ package com.starkindustries.lostandfound.controller;
 import com.starkindustries.lostandfound.dto.RequestItemDTO;
 import com.starkindustries.lostandfound.dto.ResponseItemDTO;
 import com.starkindustries.lostandfound.dto.UpdateReqDTO;
-import com.starkindustries.lostandfound.entity.Item;
 import com.starkindustries.lostandfound.service.ItemService;
+import com.starkindustries.lostandfound.util.ItemStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/items")
@@ -35,6 +37,16 @@ public class ItemController {
         return ResponseEntity.ok(items); // 200 OK
     }
 
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<ResponseItemDTO>> getByStatus(@PathVariable ItemStatus status){
+        return ResponseEntity.ok(itemService.getByStatus(status));
+    }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<ResponseItemDTO>> getByType(@PathVariable String type){
+        return ResponseEntity.ok(itemService.getByType(type));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteItem(@PathVariable Long id) {
         String response = itemService.deleteItem(id);
@@ -46,8 +58,13 @@ public class ItemController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ResponseItemDTO> updateItem(@PathVariable Long id, @RequestBody UpdateReqDTO updateReqDTO){
-        ResponseItemDTO updatedItem = itemService.updateItem(id,updateReqDTO);
-        return ResponseEntity.ok(updatedItem);
+
+            ResponseItemDTO updatedItem = itemService.updateItem(id,updateReqDTO);
+            return ResponseEntity.ok(updatedItem);
+
     }
+
+
+
 
 }
