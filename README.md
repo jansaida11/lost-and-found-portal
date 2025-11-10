@@ -22,7 +22,7 @@ This is the **first version** of the project (v1), focused on **core CRUD functi
 
 | Layer | Technology Used |
 |--------|------------------|
-| Language | Java 17+ |
+| Language | Java 21 |
 | Framework | Spring Boot |
 | Persistence Layer | Spring Data JPA (Hibernate ORM) |
 | Database | MySQL |
@@ -39,6 +39,8 @@ This is the **first version** of the project (v1), focused on **core CRUD functi
 | ➕ Post Lost Item | Users can add an item they lost. |
 | ➕ Post Found Item | Users can record an item they found. |
 | 🔍 View All Items | Retrieve a combined list of all Lost and Found items. |
+| Delete an Item | Delete an Item from portal by id |
+| Update an Item | Update an Item in portal by id |
 
 This version is designed as the **foundation** on which future functionalities like **search**, **update status**, **pagination**, and **authentication** will be added.
 
@@ -63,5 +65,3 @@ That means all Lost and Found items are stored in a **single table (`items`)**, 
 | `created_time` | TIMESTAMP | Auto-set when created |
 | `updated_time` | TIMESTAMP | Auto-set when updated |
 | `item_type` | VARCHAR | Set automatically (`LOST` or `FOUND`) |
-
----
